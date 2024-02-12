@@ -1,0 +1,18 @@
+version: '3.5'
+
+services:
+  db-postgresql:
+    image: postgres
+    hostname: db-postgresql
+    environment:
+      - POSTGRES_USER=rinhabackend
+      - POSTGRES_PASSWORD=rinhabackend
+      - POSTGRES_DB=rinhadb
+    ports:
+      - "5432:5432"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.75'
+          memory: '250MB'
+
