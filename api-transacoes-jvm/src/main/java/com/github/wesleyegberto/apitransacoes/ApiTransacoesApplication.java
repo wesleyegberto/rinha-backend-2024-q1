@@ -24,7 +24,7 @@ public class ApiTransacoesApplication {
 		return mapper;
 	}
 
-	@Bean
+	// @Bean
 	public CommandLineRunner seedClientes(ClientesRepository clientes) {
 		return args -> {
 			clientes.save(new Cliente(1, 100000, 0));
