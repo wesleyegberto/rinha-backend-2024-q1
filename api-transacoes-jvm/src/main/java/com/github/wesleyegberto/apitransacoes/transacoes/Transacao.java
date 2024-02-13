@@ -79,6 +79,9 @@ public class Transacao {
 		if (valor <= 0) {
 			return false;
 		}
+		if (descricao == null || descricao.length() < 1 || descricao.length() > 10) {
+			return false;
+		}
 		return true;
 	}
 }
