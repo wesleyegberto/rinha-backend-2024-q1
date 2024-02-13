@@ -6,9 +6,13 @@ public class TransacionaResponse {
 	private long limite;
 	private long saldo;
 
-	public TransacionaResponse(Cliente cliente) {
+	public TransacionaResponse(Cliente cliente, Transacao transacao) {
 		this.limite = cliente.getLimite();
-		this.saldo = cliente.getSaldo();
+		if (transacao.getTipo() == Transacao.TIPO_CREDITO) {
+			this.saldo = cliente.getSaldo() + transacao.getValor();
+		} else {
+			this.saldo = cliente.getSaldo() - transacao.getValor();
+		}
 	}
 
 	public long getLimite() {

@@ -44,15 +44,4 @@ public class Cliente {
 		}
 		return limite >= Math.abs(saldo - valor);
 	}
-
-	public void credita(long valor) {
-		this.saldo += valor;
-	}
-
-	public void debita(long valor) {
-		if (!consegueDebitar(valor)) {
-			throw new IllegalArgumentException("Saldo insuficiente para debitar o valor informado.");
-		}
-		this.saldo -= valor;
-	}
 }
