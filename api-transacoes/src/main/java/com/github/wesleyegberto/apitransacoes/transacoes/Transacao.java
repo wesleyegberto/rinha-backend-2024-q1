@@ -4,8 +4,6 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import org.hibernate.annotations.CreationTimestamp;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,7 +26,6 @@ public class Transacao {
 	private int id;
 
 	@Column(name = "realizada_em")
-	@CreationTimestamp
 	private LocalDateTime realizadaEm;
 
 	@Column(name = "id_cliente")
@@ -58,6 +55,7 @@ public class Transacao {
 
 	void setIdCliente(int idCliente) {
 		this.idCliente = idCliente;
+		this.realizadaEm = LocalDateTime.now();
 	}
 
 	public char getTipo() {

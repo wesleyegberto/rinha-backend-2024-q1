@@ -1,8 +1,9 @@
 version: '3.5'
 
 services:
-  api1: # API - Instância 01
-    image: wesleyegberto/rinhabackend2024q1-java-jvm
+  api1: &api1 # API - Instância 01
+    image: wesleyegberto/rinha-backend-2024-q1-jvm
+    # image: wesleyegberto/rinha-backend-2024-q1-native
     hostname: api1
     networks:
       - rinha-backend
@@ -14,34 +15,30 @@ services:
       - DATABASE_NAME=rinhadb
       - DATABASE_USERNAME=rinhabackend
       - DATABASE_PASSWORD=rinhabackend
+      - JAVA_TOOL_OPTIONS=-XX:+UseSerialGC -Xss136K -Xmx512M -XX:ReservedCodeCacheSize=128M
+      - BPL_JVM_THREAD_COUNT=100
+      - GC_MAX_METASPACE_SIZE=100
     expose:
       - "8080"
     deploy:
       resources:
         limits:
-          cpus: '0.25'
-          memory: '125MB'
+          cpus: '1.25'
+          memory: '1024MB'
 
   api2: # API - Instância 02
-    image: wesleyegberto/rinhabackend2024q1-java
+    <<: *api1
     hostname: api2
-    networks:
-      - rinha-backend
-    depends_on:
-      - db
     environment:
       - PORT=8081
       - DATABASE_HOST=db
       - DATABASE_NAME=rinhadb
       - DATABASE_USERNAME=rinhabackend
       - DATABASE_PASSWORD=rinhabackend
+      - JAVA_TOOL_OPTIONS=-XX:+UseSerialGC -Xss136K -Xmx512M -XX:ReservedCodeCacheSize=128M
+      - BPL_JVM_THREAD_COUNT=100
     expose:
       - "8081"
-    deploy:
-      resources:
-        limits:
-          cpus: '0.25'
-          memory: '125MB'
 
   nginx: # Load Balancer
     image: nginx
@@ -64,6 +61,7 @@ services:
 
   db: # Banco de dados
     image: postgres
+    hostname: db
     networks:
       - rinha-backend
     environment:
@@ -72,8 +70,11 @@ services:
       - POSTGRES_DB=rinhadb
     expose:
       - "5432"
+    ports:
+      - "5432:5432"
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    command: postgres -c max_connections=1000 -c shared_buffers=256MB -c synchronous_commit=off -c fsync=off
     deploy:
       resources:
         limits:

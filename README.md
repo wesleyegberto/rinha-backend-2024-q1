@@ -53,6 +53,12 @@ Retornos:
 - Status 200: cliente existe, retornar o saldo e as últimas 10 transações.
 - Status 404: cliente não encontrado pelo ID.
 
+## Build
+
+```bash
+mvn -Pnative spring-boot:build-image
+```
+
 ## Links
 
 - [Rinha de Backend - 2024 Q1](https://github.com/zanfranceschi/rinha-de-backend-2024-q1)

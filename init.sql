@@ -11,7 +11,7 @@ CREATE TABLE clientes (
 CREATE TABLE public.transacoes (
 	id SERIAL NOT NULL,
 	id_cliente INT NOT NULL,
-	realizada_em DATE NOT NULL,
+	realizada_em TIMESTAMP NOT NULL,
 	tipo CHAR(1) NOT NULL,
 	valor BIGINT NOT NULL,
 	descricao VARCHAR(10) NOT NULL,

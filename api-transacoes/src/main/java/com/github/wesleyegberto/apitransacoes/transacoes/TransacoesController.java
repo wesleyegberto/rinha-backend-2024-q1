@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.github.wesleyegberto.apitransacoes.clientes.Cliente;
 import com.github.wesleyegberto.apitransacoes.clientes.ClientesRepository;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -35,7 +36,7 @@ public class TransacoesController {
 
 	@Transactional
 	@PostMapping("transacoes")
-	public ResponseEntity<?> transaciona(@PathVariable("idCliente") int idCliente,
+	public ResponseEntity<TransacionaResponse> transaciona(@PathVariable("idCliente") int idCliente,
 			@RequestBody Transacao transacao) {
 		if (transacao == null || !transacao.estaValida()) {
 			return ResponseEntity.unprocessableEntity().build();
@@ -54,13 +55,13 @@ public class TransacoesController {
 				break;
 			case Transacao.TIPO_DEBITO:
 				if (!cliente.consegueDebitar(transacao.getValor())) {
-					return ResponseEntity.unprocessableEntity().body(Map.of("erro", "Saldo insuficiente para transação."));
+					return ResponseEntity.unprocessableEntity().build();
 				}
 				this.em.lock(cliente, LockModeType.PESSIMISTIC_WRITE);
 				clientes.debita(idCliente, transacao.getValor());
 				break;
 			default:
-				return ResponseEntity.unprocessableEntity().body(Map.of("erro", "Tipo de transação inváida."));
+				return ResponseEntity.unprocessableEntity().build();
 		}
 		transacoes.save(transacao);
 
