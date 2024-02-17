@@ -6,7 +6,6 @@ import java.util.Optional;
 import com.github.wesleyegberto.apitransacoes.clientes.Cliente;
 import com.github.wesleyegberto.apitransacoes.clientes.ClientesRepository;
 
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -53,15 +52,14 @@ public class TransacoesController {
 			case Transacao.TIPO_CREDITO:
 				clientes.credita(idCliente, transacao.getValor());
 				break;
+
 			case Transacao.TIPO_DEBITO:
 				if (!cliente.consegueDebitar(transacao.getValor())) {
 					return ResponseEntity.unprocessableEntity().build();
 				}
-				this.em.lock(cliente, LockModeType.PESSIMISTIC_WRITE);
+				// this.em.lock(cliente, LockModeType.PESSIMISTIC_WRITE);
 				clientes.debita(idCliente, transacao.getValor());
 				break;
-			default:
-				return ResponseEntity.unprocessableEntity().build();
 		}
 		transacoes.save(transacao);
 
