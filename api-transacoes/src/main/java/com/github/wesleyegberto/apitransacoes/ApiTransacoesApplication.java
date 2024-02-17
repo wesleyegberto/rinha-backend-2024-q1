@@ -10,7 +10,7 @@ import org.springframework.context.annotation.ImportRuntimeHints;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
 @SpringBootApplication
-@ImportRuntimeHints({ HibernateNativeHints.class, WebRuntimeHints.class })
+@ImportRuntimeHints({ WebRuntimeHints.class })
 public class ApiTransacoesApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ApiTransacoesApplication.class, args);
