@@ -50,16 +50,16 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<image>
-						<builder>dashaun/java-native-builder-arm64:7.41.0</builder>
-						<env>
-							<BP_JVM_VERSION>21</BP_JVM_VERSION>
-							<tag>${project.version}</tag>
-						</env>
-						<name>wesleyegberto/rinha-backend-2024-q1-native</name>
-					</image>
-				</configuration>
+				<!-- <configuration> -->
+				<!-- 	<image> -->
+				<!-- 		<builder>dashaun/java-native-builder-arm64:7.41.0</builder> -->
+				<!-- 		<env> -->
+				<!-- 			<BP_JVM_VERSION>21</BP_JVM_VERSION> -->
+				<!-- 			<tag>${project.version}</tag> -->
+				<!-- 		</env> -->
+				<!-- 		<name>wesleyegberto/rinha-backend-2024-q1-native</name> -->
+				<!-- 	</image> -->
+				<!-- </configuration> -->
 			</plugin>
 			<plugin>
 				<groupId>org.graalvm.buildtools</groupId>
