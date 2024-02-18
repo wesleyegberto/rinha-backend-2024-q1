@@ -2,43 +2,47 @@ version: '3.5'
 
 services:
   api1: &api1 # API - Instância 01
-    image: wesleyegberto/rinha-backend-2024-q1-jvm
-    # image: wesleyegberto/rinha-backend-2024-q1-native
+    image: wesleyegberto/rinha-backend-2024-q1-native
     hostname: api1
     networks:
       - rinha-backend
     depends_on:
-      - db
-    environment:
-      - PORT=8080
-      - DATABASE_HOST=db
-      - DATABASE_NAME=rinhadb
-      - DATABASE_USERNAME=rinhabackend
-      - DATABASE_PASSWORD=rinhabackend
-      - JAVA_TOOL_OPTIONS=-XX:+UseSerialGC -Xss136K -Xmx512M -XX:ReservedCodeCacheSize=128M
-      - BPL_JVM_THREAD_COUNT=100
-      - GC_MAX_METASPACE_SIZE=100
+      db:
+        condition: service_healthy
+    environment: &env
+      PORT: 8080
+      DATABASE_HOST: db
+      DATABASE_NAME: rinhadb
+      DATABASE_USERNAME: rinhabackend
+      DATABASE_PASSWORD: rinhabackend
+      JAVA_TOOL_OPTIONS: -XX:+UseSerialGC -Xss136K -Xmx512M -XX:ReservedCodeCacheSize=128M
+      BPL_JVM_THREAD_COUNT: 100
+      GC_MAX_METASPACE_SIZE: 100
     expose:
       - "8080"
+    healthcheck: &healthcheck
+      test: ["CMD", "curl", "-f", "http://localhost:8080/clientes/1/extrato"]
+      start_period: 5s
+      interval: 5s
+      timeout: 10s
+      retries: 10
     deploy:
       resources:
         limits:
-          cpus: '1.25'
-          memory: '1024MB'
+          cpus: '0.25'
+          memory: '125MB'
 
   api2: # API - Instância 02
     <<: *api1
     hostname: api2
     environment:
-      - PORT=8081
-      - DATABASE_HOST=db
-      - DATABASE_NAME=rinhadb
-      - DATABASE_USERNAME=rinhabackend
-      - DATABASE_PASSWORD=rinhabackend
-      - JAVA_TOOL_OPTIONS=-XX:+UseSerialGC -Xss136K -Xmx512M -XX:ReservedCodeCacheSize=128M
-      - BPL_JVM_THREAD_COUNT=100
+      <<: *env
+      PORT: 8081
     expose:
       - "8081"
+    healthcheck:
+      <<: *healthcheck
+      test: ["CMD", "curl", "-f", "http://localhost:8081/clientes/1/extrato"]
 
   nginx: # Load Balancer
     image: nginx
@@ -47,8 +51,10 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
-      - api1
-      - api2
+      api1:
+          condition: service_healthy
+      api2:
+          condition: service_healthy
     expose:
       - "9999"
     ports:
@@ -56,7 +62,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.25'
+          cpus: '0.10'
           memory: '50MB'
 
   db: # Banco de dados
@@ -74,14 +80,18 @@ services:
       - "5432:5432"
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-    command: postgres -c max_connections=1000 -c shared_buffers=256MB -c synchronous_commit=off -c fsync=off
+    command: postgres -c max_connections=250 -c shared_buffers=96MB -c synchronous_commit=off -c fsync=off
+    healthcheck:
+      test: ["CMD", "pg_isready", "--username", "rinha"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
     deploy:
       resources:
         limits:
-          cpus: '0.75'
+          cpus: '0.90'
           memory: '250MB'
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
 
 networks:
   rinha-backend:
