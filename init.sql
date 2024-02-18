@@ -2,10 +2,10 @@ DROP TABLE IF EXISTS public.clientes;
 DROP TABLE IF EXISTS public.transacoes;
 
 CREATE UNLOGGED TABLE clientes (
-	id INT NOT NULL,
-	-- nome VARCHAR(50) NOT NULL,
+	id SERIAL NOT NULL,
+	nome VARCHAR(50) NOT NULL,
 	limite BIGINT NOT NULL,
-	saldo BIGINT NOT NULL,
+	saldo BIGINT NOT NULL DEFAULT 0,
 	CONSTRAINT clientes_pk PRIMARY KEY (id)
 );
 
@@ -25,14 +25,11 @@ CREATE UNLOGGED TABLE public.transacoes (
 CREATE INDEX ultimas_transacoes_idx ON public.transacoes (id_cliente ASC, realizada_em DESC);
 
 -- Clientes iniciais
--- INSERT INTO public.clientes (nome, limite)
--- VALUES
--- 	('o barato sai caro', 1000 * 100),
--- 	('zan corp ltda', 800 * 100),
--- 	('les cruders', 10000 * 100),
--- 	('padaria joia de cocaia', 100000 * 100),
--- 	('kid mais', 5000 * 100);
-
-INSERT INTO public.clientes
-VALUES (1, 100000, 0), (2, 80000, 0), (3, 1000000, 0), (4, 10000000, 0), (5, 500000, 0);
+INSERT INTO public.clientes (nome, limite)
+VALUES
+	('o barato sai caro', 1000 * 100),
+	('zan corp ltda', 800 * 100),
+	('les cruders', 10000 * 100),
+	('padaria joia de cocaia', 100000 * 100),
+	('kid mais', 5000 * 100);
 

@@ -62,4 +62,7 @@ mvn -Pnative spring-boot:build-image
 ## Links
 
 - [Rinha de Backend - 2024 Q1](https://github.com/zanfranceschi/rinha-de-backend-2024-q1)
+- Postgres:
+    - [Configuring work_mem in Postgres](https://www.pgmustard.com/blog/work-mem)
+    - [Using BUFFERS for query optimization](https://www.pgmustard.com/blog/using-postgres-buffers-for-query-optimization)
 

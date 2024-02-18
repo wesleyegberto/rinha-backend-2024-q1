@@ -7,6 +7,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ClientesRepository extends CrudRepository<Cliente, Integer> {
+	@Query(
+		value = "SELECT id, limite, saldo FROM clientes WHERE id = ?1",
+		nativeQuery = true
+	)
 	Cliente findById(int id);
 
 	@Modifying
