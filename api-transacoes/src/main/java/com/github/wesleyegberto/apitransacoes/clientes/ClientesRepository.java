@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ClientesRepository extends CrudRepository<Cliente, Integer> {
+	Cliente findById(int id);
+
 	@Modifying
 	@Query(
 		value = "UPDATE clientes SET saldo = saldo + ?2 WHERE id = ?1",
@@ -16,7 +18,7 @@ public interface ClientesRepository extends CrudRepository<Cliente, Integer> {
 
 	@Modifying
 	@Query(
-		value = "UPDATE clientes SET saldo = saldo - ?2 WHERE id = ?1 AND (saldo >= ?2 OR limite >= ABS(saldo - ?2))",
+		value = "UPDATE clientes SET saldo = saldo - ?2 WHERE id = ?1 AND (saldo + limite - ?2 >= 0)",
 		nativeQuery = true
 	)
 	void debita(int idCliente, long valor);

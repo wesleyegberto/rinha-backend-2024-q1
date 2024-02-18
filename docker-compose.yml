@@ -16,7 +16,6 @@ services:
       DATABASE_USERNAME: rinhabackend
       DATABASE_PASSWORD: rinhabackend
       POOL_SIZE: 16
-      BPL_JVM_THREAD_COUNT: 200
     expose:
       - "8080"
     # healthcheck: &healthcheck
@@ -29,16 +28,11 @@ services:
       resources:
         limits:
           cpus: '0.25'
-          memory: '125MB'
+          memory: '130MB'
 
   api2: # API - Instância 02
     <<: *api1
     hostname: api2
-    environment:
-      <<: *env
-      PORT: 8081
-    expose:
-      - "8081"
     # healthcheck:
     #   <<: *healthcheck
     #   test: ["CMD", "curl", "-f", "http://localhost:8081/clientes/1/extrato"]
@@ -62,7 +56,7 @@ services:
       resources:
         limits:
           cpus: '0.10'
-          memory: '50MB'
+          memory: '15MB'
 
   db: # Banco de dados
     image: postgres
@@ -79,7 +73,7 @@ services:
       - "5432:5432"
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-    command: postgres -c max_connections=400 -c shared_buffers=96MB -c synchronous_commit=off -c fsync=off
+    command: postgres -c max_connections=64 -c shared_buffers=96MB -c work_mem=16MB -c synchronous_commit=off -c fsync=off -c full_page_writes=off
     healthcheck:
       test: ["CMD", "pg_isready", "--username", "rinha"]
       interval: 5s
@@ -90,7 +84,7 @@ services:
       resources:
         limits:
           cpus: '0.90'
-          memory: '250MB'
+          memory: '275MB'
 
 networks:
   rinha-backend:
