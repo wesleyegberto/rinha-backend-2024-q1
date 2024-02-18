@@ -15,8 +15,8 @@ services:
       DATABASE_NAME: rinhadb
       DATABASE_USERNAME: rinhabackend
       DATABASE_PASSWORD: rinhabackend
-      POOL_SIZE: 20
-      BPL_JVM_THREAD_COUNT: 150
+      POOL_SIZE: 16
+      BPL_JVM_THREAD_COUNT: 200
     expose:
       - "8080"
     # healthcheck: &healthcheck
