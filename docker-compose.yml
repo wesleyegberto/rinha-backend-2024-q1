@@ -15,17 +15,16 @@ services:
       DATABASE_NAME: rinhadb
       DATABASE_USERNAME: rinhabackend
       DATABASE_PASSWORD: rinhabackend
-      JAVA_TOOL_OPTIONS: -XX:+UseSerialGC -Xss136K -Xmx512M -XX:ReservedCodeCacheSize=128M
-      BPL_JVM_THREAD_COUNT: 100
-      GC_MAX_METASPACE_SIZE: 100
+      POOL_SIZE: 20
+      BPL_JVM_THREAD_COUNT: 150
     expose:
       - "8080"
-    healthcheck: &healthcheck
-      test: ["CMD", "curl", "-f", "http://localhost:8080/clientes/1/extrato"]
-      start_period: 5s
-      interval: 5s
-      timeout: 10s
-      retries: 10
+    # healthcheck: &healthcheck
+    #   test: ["CMD", "curl", "-f", "http://localhost:8080/clientes/1/extrato"]
+    #   start_period: 5s
+    #   interval: 5s
+    #   timeout: 10s
+    #   retries: 10
     deploy:
       resources:
         limits:
@@ -40,9 +39,9 @@ services:
       PORT: 8081
     expose:
       - "8081"
-    healthcheck:
-      <<: *healthcheck
-      test: ["CMD", "curl", "-f", "http://localhost:8081/clientes/1/extrato"]
+    # healthcheck:
+    #   <<: *healthcheck
+    #   test: ["CMD", "curl", "-f", "http://localhost:8081/clientes/1/extrato"]
 
   nginx: # Load Balancer
     image: nginx
@@ -51,10 +50,10 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
-      api1:
-          condition: service_healthy
-      api2:
-          condition: service_healthy
+      - api1
+          # condition: service_healthy
+      - api2
+          # condition: service_healthy
     expose:
       - "9999"
     ports:
@@ -80,7 +79,7 @@ services:
       - "5432:5432"
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-    command: postgres -c max_connections=250 -c shared_buffers=96MB -c synchronous_commit=off -c fsync=off
+    command: postgres -c max_connections=400 -c shared_buffers=96MB -c synchronous_commit=off -c fsync=off
     healthcheck:
       test: ["CMD", "pg_isready", "--username", "rinha"]
       interval: 5s
