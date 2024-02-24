@@ -3,7 +3,7 @@
 - Banco de dados: Postgres, MySQL ou MongoDB
 - O ambiente será limitado com 1.5 CPU e 550MB distribuídos entre todos os recursos (banco de dados, APIs, LB).
 
-Projetos:
+Projeto:
 
 - **api-transacoes:** API com Spring Boot rodando em modo native.
 - **nginx:** arquivo de configuração do Nginx.
@@ -47,7 +47,7 @@ Retornos:
 - Status 200: cliente existe e transação realizada, retornar o limite e o saldo atualizado.
 - Status 404: cliente não encontrado pelo ID.
 
-** Consulta de Extrato**
+**Consulta de Extrato**
 
 Retornos:
 
