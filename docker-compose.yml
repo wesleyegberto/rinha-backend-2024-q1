@@ -27,7 +27,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.25'
+          cpus: '0.40'
           memory: '130MB'
 
   api2: # API - Instância 02
@@ -38,7 +38,7 @@ services:
     #   test: ["CMD", "curl", "-f", "http://localhost:8081/clientes/1/extrato"]
 
   nginx: # Load Balancer
-    image: nginx
+    image: nginx:1.25.3
     networks:
       - rinha-backend
     volumes:
@@ -83,7 +83,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.90'
+          cpus: '0.60'
           memory: '275MB'
 
 networks:
