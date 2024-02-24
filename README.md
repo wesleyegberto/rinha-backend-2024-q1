@@ -5,8 +5,9 @@
 
 Projetos:
 
-- **api-transacoes-jvm:** API com Spring Boot rodando em JVM.
-- **api-transacoes-native:** API com Spring Boot rodando em modo native.
+- **api-transacoes:** API com Spring Boot rodando em modo native.
+- **nginx:** arquivo de configuração do Nginx.
+- **init.sql:** script SQL para criação dos schemas e inserção dos cinco clientes.
 
 ## Arquitetura
 
@@ -56,7 +57,7 @@ Retornos:
 ## Build
 
 ```bash
-mvn -Pnative spring-boot:build-image
+sh build_docker_native_image.sh
 ```
 
 ## Links
